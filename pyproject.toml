@@ -1,0 +1,56 @@
+[project]
+name = "event-managent-system"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.16.4",
+    "argon2-cffi>=25.1.0",
+    "celery>=5.5.3",
+    "fastapi[all]>=0.116.1",
+    "flower>=2.0.1",
+    "passlib>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "python-dotenv>=1.1.1",
+    "python-jose>=3.5.0",
+    "redis>=6.2.0",
+    "sqlalchemy>=2.0.42",
+    "starlette-admin>=0.15.1",
+]
+
+# RUFF configs
+[tool.ruff]
+# General settings
+target-version = "py312"
+line-length = 88
+
+# Enable rules
+lint.select = ["E", "F", "I", "N", "UP", "B", "C90", "RUF"]
+
+lint.ignore = [
+    "E501",     # line too long
+    "RUF001",   # ambiguous unicode character in code
+    "RUF002",   # ambiguous unicode character in docstring\
+    "RUF012",
+]  
+
+# Paths to exclude
+exclude = ["migrations", "__pycache__", ".venv"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --tb=short --strict-markers"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.7",
+]
