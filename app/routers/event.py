@@ -8,8 +8,6 @@ from app.utils.dependencies import current_user_dependency, db_dependency
 
 router = APIRouter(prefix="/events", tags=["events"])
 
-# ------------------ Event APIs ------------------
-
 
 @router.post("/events/", response_model=EventOut)
 def create_event(

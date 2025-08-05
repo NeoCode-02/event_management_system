@@ -12,11 +12,9 @@ from app.core.config import settings
 from app.database.database import SessionLocal
 from app.models.user import User
 
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 dbearer_scheme = HTTPBearer(auto_error=False)
 
 
-# --- DB Dependency ---
 def get_db() -> Session:
     db = SessionLocal()
     try:
@@ -28,7 +26,6 @@ def get_db() -> Session:
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-# --- Current User Dependency ---
 def get_current_user(
     token: Annotated[HTTPAuthorizationCredentials, Depends(dbearer_scheme)],
     db: db_dependency,

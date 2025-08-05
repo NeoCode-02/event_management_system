@@ -7,7 +7,6 @@ redis_client = redis.StrictRedis.from_url(
     settings.REDIS_URL, decode_responses=True
 )
 
-# ---------- helpers for e-mail verification ----------
 VERIFICATION_PREFIX = "email:verification"
 RATE_LIMIT_PREFIX   = "email:rate_limit"
 
@@ -23,7 +22,7 @@ def delete_verification_code(email: str) -> None:
     key = f"{VERIFICATION_PREFIX}:{email}"
     redis_client.delete(key)
 
-# ---------- helpers for rate limiting ----------
+#Rate limiter
 def is_rate_limited(email: str) -> bool:
     key = f"{RATE_LIMIT_PREFIX}:{email}"
     return bool(redis_client.exists(key))

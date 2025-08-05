@@ -47,19 +47,13 @@ def send_email_verification(self, to_email: str, code: str) -> None:
             server.login(settings.EMAIL_ADDRESS, settings.EMAIL_PASSWORD)
             server.sendmail(settings.EMAIL_ADDRESS, to_email, msg.as_string())
     except Exception as exc:
-        # Exponential back-off: 60 s, 120 s, 240 s
+   
         countdown = 60 * (2 ** self.request.retries)
         raise self.retry(exc=exc, countdown=countdown)
 
 
 def send_verification_email_task(to_email: str) -> str:
-    """
-    1. Check rate-limit.
-    2. Generate & store code.
-    3. Set rate-limit.
-    4. Dispatch Celery task.
-    Returns the generated code so the caller can return it in tests.
-    """
+
     if is_rate_limited(to_email):
         raise Exception("Please wait before requesting another code.")
 

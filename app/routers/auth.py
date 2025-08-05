@@ -31,8 +31,7 @@ def register_user(payload: RegisterSchema, db: db_dependency):
     Everyone else receives an e-mail verification code.
     """
     try:
-        # This is atomic: if another request slips in between count() and add()
-        # the UNIQUE(email) constraint will raise IntegrityError.
+   
         user_count = db.query(User).count()
         is_first_user = user_count == 0
 
@@ -55,7 +54,7 @@ def register_user(payload: RegisterSchema, db: db_dependency):
         try:
             send_verification_email_task(payload.email)
         except Exception as e:
-            # Remove the user we just created so the DB stays clean
+         
             db.delete(user)
             db.commit()
             raise HTTPException(status_code=429, detail=str(e))
@@ -101,7 +100,7 @@ def verify_code(payload: VerifyCodeSchema, db: db_dependency):
     user.is_confirmed = True
     db.commit()
 
-    # Clean up Redis keys
+
     delete_verification_code(payload.email)
     clear_rate_limit(payload.email)
 
@@ -137,4 +136,4 @@ def get_me(current_user: current_user_dependency):
 def delete_my_account(current_user: current_user_dependency, db: db_dependency):
     db.delete(current_user)
     db.commit()
-    return None  # 204 No Content
+    return None  

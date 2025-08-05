@@ -55,7 +55,7 @@ def update_registration_status(
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
-    # Only event creator can change to ACCEPTED/REJECTED
+   
     if payload.status in [Status.ACCEPTED, Status.REJECTED]:
         if event.organizer_id != current_user.id:
             raise HTTPException(
