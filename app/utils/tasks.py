@@ -23,13 +23,13 @@ celery_app.conf.task_routes = {
 
 
 def generate_verification_code(length: int = 6) -> str:
-    """Return a numeric code of `length` digits."""
+  
     return f"{random.randint(10**(length-1), 10**length - 1)}"
 
 
 @celery_app.task(bind=True, max_retries=3)
 def send_email_verification(self, to_email: str, code: str) -> None:
-    """Send verification e-mail via SMTP. Retries automatically on failure."""
+    
     subject = "Your Verification Code"
     body = (
         f"Hello,\n\n"
@@ -53,13 +53,11 @@ def send_email_verification(self, to_email: str, code: str) -> None:
 
 
 def send_verification_email_task(to_email: str) -> str:
-
     if is_rate_limited(to_email):
         raise Exception("Please wait before requesting another code.")
 
     code = generate_verification_code()
-    store_verification_code(to_email, code)
-    set_rate_limit(to_email)
-
-    send_email_verification.delay(to_email, code)
+    store_verification_code(to_email, code)  
+    send_email_verification.delay(to_email, code) 
+    set_rate_limit(to_email)  
     return code
