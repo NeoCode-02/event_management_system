@@ -74,18 +74,3 @@ def update_registration_status(
     db.refresh(reg)
     return reg
 
-
-@router.delete("/registrations/{registration_id}")
-def cancel_registration(registration_id: UUID, db: db_dependency):
-    reg = db.query(Registration).filter_by(id=registration_id).first()
-    if not reg:
-        raise HTTPException(status_code=404, detail="Registration not found")
-
-    if reg.status == Status.REJECTED:
-        raise HTTPException(
-            status_code=403, detail="Cannot cancel a rejected registration"
-        )
-
-    reg.status = Status.CANCELLED
-    db.commit()
-    return {"detail": "Registration cancelled"}

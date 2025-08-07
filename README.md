@@ -71,11 +71,48 @@ A modern, scalable, and secure event management system built with FastAPI, SQLAl
    - API Documentation: http://localhost:8000/docs
    - Admin Panel: http://localhost:8000/admin
 
-## 📚 API Documentation
 
-Once the application is running, you can access the interactive API documentation at:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+## 🐳 Docker Setup
+
+### 1. Build and Start All Services
+
+```bash
+docker-compose up --build
+```
+
+This will start:
+- FastAPI app (http://localhost:8000)
+- PostgreSQL (localhost:5432)
+- Redis (localhost:6379)
+
+### 2. Environment Variables
+
+Copy and edit your environment file:
+```bash
+cp .env.example .env
+# Edit .env as needed
+```
+
+The following variables are set by docker-compose, but you can override them in your .env:
+- `DATABASE_URL=postgresql+psycopg2://eventuser:eventpass@db:5432/eventdb`
+- `REDIS_URL=redis://redis:6379/0`
+- `CELERY_BROKER_URL=redis://redis:6379/0`
+- `CELERY_RESULT_BACKEND=redis://redis:6379/0`
+
+Add your JWT secrets and email credentials to `.env`.
+
+### 3. Run Alembic Migrations
+
+In a new terminal (with containers running):
+```bash
+docker-compose exec app alembic upgrade head
+```
+
+### 4. Stopping Services
+
+```bash
+docker-compose down
+```
 
 ## 🤝 Contributing
 
@@ -86,3 +123,14 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+## ⚡ Dependency Management with uv
+
+This project uses [uv](https://github.com/astral-sh/uv) for fast dependency management in Docker and optionally for local development. You can install it with:
+
+```bash
+pip install uv
+```
+
+### Docker Notes
+- The Dockerfile now uses uv for dependency management for faster, more efficient builds.
