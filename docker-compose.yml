@@ -27,7 +27,6 @@ services:
       - .env
     depends_on:
       - redis
-      - db
     restart: unless-stopped
 
   app:
