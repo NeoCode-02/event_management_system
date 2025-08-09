@@ -10,11 +10,10 @@ RUN useradd -m appuser
 
 WORKDIR /app
 
-RUN pip install uv
 
-COPY pyproject.toml ./
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN uv pip install --system --no-deps . && uv sync
 
 COPY . .
 
