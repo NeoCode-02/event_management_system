@@ -22,7 +22,7 @@ services:
 
   celery:
     build: .
-    command: celery -A app.utils.tasks worker --loglevel=info
+    command: celery -A app.utils.tasks worker --loglevel=info -Q emails,celery
     env_file:
       - .env
     depends_on:
@@ -46,6 +46,20 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+
+  frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm ci || npm i && npm run dev -- --host"
+    environment:
+      - NODE_ENV=development
+      - VITE_BACKEND_URL=http://app:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app
 
 volumes:
   postgres_data:

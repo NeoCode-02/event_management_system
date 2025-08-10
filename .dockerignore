@@ -1,3 +1,35 @@
+# Exclude frontend from Python image build context
+frontend
+
+# Node modules anywhere
+**/node_modules
+
+# Git
+.git
+.gitignore
+
+# Env files
+.env
+*.env
+
+# Python caches
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+.mypy_cache
+.pytest_cache
+
+# Editor/OS
+.vscode
+.idea
+.DS_Store
+
+# Build outputs
+dist
+build
+
 __pycache__/
 *.pyc
 *.pyo

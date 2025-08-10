@@ -24,8 +24,10 @@ class Registration(Base, TimeMixin):
     name: Mapped[str] = mapped_column(String, nullable=False)
     surname: Mapped[str] = mapped_column(String, nullable=True)
     phone: Mapped[str] = mapped_column(String, nullable=False)
-    email: Mapped[str] = mapped_column(String, nullable=True)
+    email: Mapped[str | None] = mapped_column(String, nullable=True)
     status: Mapped[str] = mapped_column(String, default=Status.WAITLIST)
 
-    event_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("events.id"))
+    event_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("events.id", ondelete="CASCADE"), nullable=False
+    )
     event = relationship("Event", back_populates="registrations")

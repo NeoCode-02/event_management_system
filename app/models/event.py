@@ -23,4 +23,9 @@ class Event(Base, TimeMixin):
     organizer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"))
     organizer = relationship("User", back_populates="events")
 
-    registrations = relationship("Registration", back_populates="event")
+    registrations = relationship(
+        "Registration",
+        back_populates="event",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )

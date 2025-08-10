@@ -33,8 +33,24 @@ def list_events(
     db: db_dependency,
     skip: int = 0,
     limit: int = 10,
+    upcoming_only: bool = True,
 ):
+    from datetime import datetime
+
     query = db.query(Event)
+    if upcoming_only:
+        query = query.filter(Event.date >= datetime.utcnow())
+    return query.order_by(Event.date.asc()).offset(skip).limit(limit).all()
+
+
+@router.get("/my/", response_model=list[EventOut])
+def my_events(
+    db: db_dependency,
+    current_user: current_user_dependency,
+    skip: int = 0,
+    limit: int = 50,
+):
+    query = db.query(Event).filter_by(organizer_id=current_user.id)
     return query.offset(skip).limit(limit).all()
 
 
